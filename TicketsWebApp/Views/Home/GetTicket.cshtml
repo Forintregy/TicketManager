@@ -1,0 +1,68 @@
+﻿@model TicketInputModel
+@{
+	ViewData["Title"] = "TicketApp - главная";
+}
+
+
+
+<div class="modal-content modal-dialog-scrollable">
+	<div class="modal-header">
+		<h4>Детальное описание тикета</h4>
+	</div>
+	<div class="modal-body">
+		<div class="table-responsive">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>
+							@Html.DisplayNameFor(model => model.Name)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.AssigneeId)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.AssignerId)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.State)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.Priority)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.Description)
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							@Model.Name
+						</td>
+						<td>
+							@Model.AssigneeId
+						</td>
+						<td>
+							@Model.AssignerId
+						</td>
+						<td>
+							@Model.State
+						</td>
+						<td>
+							@Model.Priority
+						</td>
+						<td>
+							@Model.Description
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-primary" data-dismiss="modal">
+			Закрыть
+		</button>
+	</div>
+</div>
+	

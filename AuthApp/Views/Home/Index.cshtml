@@ -1,0 +1,32 @@
+@using System.Diagnostics
+
+@{
+    var version = FileVersionInfo.GetVersionInfo(typeof(IdentityServer4.Hosting.IdentityServerMiddleware).Assembly.Location).ProductVersion.Split('+').First();
+}
+
+<div class="welcome-page">
+    <h1>
+        <img src="~/icon.jpg">
+        Добро пожаловать в IdentityServer4!
+        <small class="text-muted">(версия @version)</small>
+    </h1>
+
+    <ul>
+        <li>
+            IdentityServer публикует  
+            <a href="~/.well-known/openid-configuration">документ (discovery document)</a>
+            в котором содержатся ссылки на эндпоинты и прочие материалы.
+        </li>
+        <li>
+            Нажмите <a href="~/diagnostics">сюда</a> для того, чтобы взглянуть на claims текущей сессии.
+        </li>
+        <li>
+            Нажмите <a href="~/grants">сюда</a> для управления выданными правами.
+        </li>
+        <li>
+            Здесь приведены ссылки на
+            <a href="https://github.com/identityserver/IdentityServer4">репозиторий с исходным кодом</a>
+            и <a href="https://github.com/IdentityServer/IdentityServer4/tree/main/samples">готовыми примерами</a>.
+        </li>
+    </ul>
+</div>

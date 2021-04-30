@@ -1,0 +1,82 @@
+﻿@model IEnumerable<TicketInputModel>
+@{
+	ViewData["Title"] = "TicketApp - главная";
+}
+
+
+<div class="text-monospace">	
+	<h2>Привет, @(User.FindFirst("name")?.Value +"!"??"")</h2>
+</div>
+<div id="modDialog" class="modal fade">
+	<div id="dialogContent" class="modal-dialog"></div>
+</div>
+<table class="table">
+
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Name)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Priority)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.State)
+			</th>
+			<th>
+				Действия
+			</th>
+			
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.Name)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Priority)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.State)
+			</td>
+			<td>
+				@Html.ActionLink("Детали", "GetTicket", new { id = item.Id }, new { @class = "ticketDetails" }) |
+				@Html.ActionLink("Изменить", "EditTicket", new { id = item.Id })
+			</td>
+			
+
+
+
+		</tr>
+		}
+	</tbody>
+</table>
+@if(User.IsInRole("manager"))
+{
+	<a asp-action="CreateTicket">
+		<type="button" class="btn btn-primary">
+			Создать тикет
+		</type>
+	</a>
+}
+
+@section scripts
+{
+	<script type="text/javascript">
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+			$(".ticketDetails").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        })
+	</script>
+}
