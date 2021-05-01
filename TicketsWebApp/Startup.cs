@@ -43,7 +43,9 @@ namespace TicketsWebApp
             .AddCookie("Cookies")
             .AddOpenIdConnect("oidc", o =>
             {
-                o.SignInScheme = "Cookies";
+                o.SignInScheme = "Cookies";//
+                o.RemoteSignOutPath = "/connect/endsession";
+                //
                 o.Authority = "https://localhost:5005";
                 o.ClientId = "mvc-client";
                 o.ResponseType = "code id_token";

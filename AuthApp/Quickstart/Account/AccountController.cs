@@ -32,7 +32,7 @@ namespace IdentityServerHost.Quickstart.UI
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        private readonly SignInManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
@@ -48,7 +48,7 @@ namespace IdentityServerHost.Quickstart.UI
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
             // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
-            _userManager = users;
+            _signInManager = users;
 
             _interaction = interaction;
             _clientStore = clientStore;
@@ -71,15 +71,15 @@ namespace IdentityServerHost.Quickstart.UI
             }
 
             var user = new IdentityUser(vm.Username);
-            var result = await _userManager.UserManager.CreateAsync(user, vm.Password);
+            var result = await _signInManager.UserManager.CreateAsync(user, vm.Password);
             
             if (result.Succeeded)
             {
                 var roleAssignment = 
-                    await _userManager.UserManager.AddClaimAsync(user, new System.Security.Claims.Claim("role", "developer"));
-                if (roleAssignment.Succeeded && await _userManager.CheckPasswordSignInAsync(user, vm.Password, true)==SignInResult.Success)
+                    await _signInManager.UserManager.AddClaimAsync(user, new System.Security.Claims.Claim("role", "developer"));
+                if (roleAssignment.Succeeded && await _signInManager.CheckPasswordSignInAsync(user, vm.Password, true)==SignInResult.Success)
                 {
-                    await _userManager.SignInAsync(user, true);
+                    await _signInManager.SignInAsync(user, true);
                     return Redirect(vm.ReturnUrl);
                 }
                 else throw new Exception($"Ошибка при присвоении пользователю {user.UserName} роли менеджера");
@@ -146,10 +146,10 @@ namespace IdentityServerHost.Quickstart.UI
             if (ModelState.IsValid)
             {
                 // validate username/password against in-memory store
-                var user = await _userManager.UserManager.FindByNameAsync(model.Username);
+                var user = await _signInManager.UserManager.FindByNameAsync(model.Username);
 
                 // validate username/password using ASP.NET Identity
-                if (user != null && (await _userManager.CheckPasswordSignInAsync(user, model.Password, true)) == SignInResult.Success)
+                if (user != null && (await _signInManager.CheckPasswordSignInAsync(user, model.Password, true)) == SignInResult.Success)
                 {
                     await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.Client.ClientId));
 
@@ -244,7 +244,7 @@ namespace IdentityServerHost.Quickstart.UI
             if (User?.Identity.IsAuthenticated == true)
             {
                 // delete local authentication cookie
-                await HttpContext.SignOutAsync();
+                await _signInManager.SignOutAsync();
 
                 // raise the logout event
                 await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));

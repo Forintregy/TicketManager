@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace TicketsWebApp.Controllers
 {
     public class AuthenticationController : Controller
     {
-        public async Task Logout()
+        public IActionResult Logout()
         {
-            await HttpContext.SignOutAsync();
+            return new SignOutResult(new[] { "oidc", "Cookies"});
         }
     }
 }
